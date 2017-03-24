@@ -13,7 +13,8 @@ from django.http import HttpResponse
 #@user_passes_test(lambda u: u.groups.filter(name='admin') or u.is_staff, login_url='/login/')
 def display_home(request):
 
+	template = 'index.html'
 	context = {}
-	#return render_to_response('Hello world!', context,context_instance=RequestContext(request))
-	return HttpResponse("Hello world")
+	return render_to_response(template, context,context_instance=RequestContext(request))
+	#return HttpResponse("Hello world")
 
