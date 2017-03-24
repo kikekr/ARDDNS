@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+PROJECT_ROOT = os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+#    'bootstrapform',
     'app'
 )
 
@@ -52,6 +54,14 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'ARDDNS.urls'
 
 WSGI_APPLICATION = 'ARDDNS.wsgi.application'
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or
+    # "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'templates').replace('\\', '/'),
+)
 
 
 # Database
