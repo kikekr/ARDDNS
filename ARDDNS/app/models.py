@@ -14,6 +14,9 @@ class Device(models.Model):
 	last_seen = models.DateTimeField(null = True)
 	location = models.CharField(max_length = 100, null = True)
 
+	def __str__(self):
+		return self.hostname
+
 	def get_api_key(self):
 
 		####################################################################
