@@ -1,20 +1,45 @@
 # -*- coding: utf-8 -*-
+
+import json
+
 from django.shortcuts import render
 from app.models import *
 from django.template import RequestContext
 from django.shortcuts import redirect, render_to_response
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
 
-# Vista Pagina de Inicio
-#Vista de Configuración de Monolitos
-# @login_required
-#@user_passes_test(lambda u: u.groups.filter(name='admin') or u.is_staff, login_url='/login/')
+
+
+# VIEWS
+
+# Home page
 def display_home(request):
 
 	template = 'index.html'
 	context = {}
 	return render_to_response(template, context,context_instance=RequestContext(request))
-	#return HttpResponse("Hello world")
+
+
+
+###########################################################################################
+
+
+# API
+
+#Permite Desactivar Seguridad csrf para hacer las peticiones ajax
+@csrf_exempt
+def devices(request):
+
+	# Create a new device
+	if request.method == "POST":
+		return HttpResponse("Create a new device")
+
+	# Update device info
+	if request.method == "PUT":
+		return HttpResponse("Update device info")
+
+	if request.method == "DELETE":
+		return HttpResponse("Delete device")
 
