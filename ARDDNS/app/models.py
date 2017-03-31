@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
-
-import json
-
 from app.util import build_api_key
+import json
 
 # Create your models here.
 
