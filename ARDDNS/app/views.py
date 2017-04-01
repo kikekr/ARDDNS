@@ -41,25 +41,23 @@ def devices(request):
 
 	ip_address = request.META.get('REMOTE_ADDR')
 
-	# Create a new device
-	if request.method == "POST":
-
-		# Parseamos el contenido del cuerpo del mensaje
-		data = json.loads(request.body)
+	# Parseamos el contenido del cuerpo del mensaje
+	data = json.loads(request.body)
 		
-		try:
+	try:
 
-			# Intentamos obtener los datos obligatorios para crear un dispositivo
-			hostname = data["hostname"]
-			mac_address = data["mac_address"]
-			api_key = data["api_key"]
+		# Intentamos obtener los datos obligatorios para crear un dispositivo
+		hostname = data["hostname"]
+		mac_address = data["mac_address"]
+		api_key = data["api_key"]
 
-		#	print(build_api_key(hostname, mac_address))
+		# Comprobamos que el API KEY es válido
+		if api_key == build_api_key(hostname, mac_address):
 
-			# Comprobamos que el API KEY es válido
-			if api_key == build_api_key(hostname, mac_address):
+			# Si el API KEY es válido:
 
-				# Si el API KEY es válido:
+			# Create a new device
+			if request.method == "POST":
 
 				# Comprobamos si el dispositivo ya existe en base de datos
 				try:
@@ -81,42 +79,60 @@ def devices(request):
 
 					device.save()
 
+					# TO DO: Actualizar servicio DNS
 
-					#TO DO: Return HTTP 201 CREATED
 					return HttpResponse("Device created")
 
-			else:
+			# Update device info
+			elif request.method == "PUT":
 
-				# Si el api key no es válido:
-				# Almacenamos en base de datos el intento fallido de autenticación
+				# Comprobamos si el dispositivo ya existe en base de datos
 				try:
-					# Primero buscamos si ya exite algún registro fallido para esa ip
-					authenticationFailed = AuthenticationFailed.objects.get(ip = ip_address)
+					device = Device.objects.get(hostname = hostname, mac_address = mac_address)
 
-				except AuthenticationFailed.DoesNotExist:
+					# Si existe, no saltará la excepción, actualizamos sus datos.
 
-					# Si no existe, lo creamos
-					authenticationFailed = AuthenticationFailed()
-					authenticationFailed.ip = ip_address
+					device.hostname = hostname
+					device.mac_address = mac_address
+					device.ip = ip_address
+					# device.location = 
+					device.last_seen = timezone.now()
+
+					device.save()
+
+					# TO DO: Actualizar servicio DNS
+
+					return HttpResponse('Device updated')
+
+				# En caso de que no exista saltará la excepción 'DoesNotExist'
+				except Device.DoesNotExist:
+
+					return HttpResponseNotFound('Device not found')
+
+		else:
+
+			# Si el api key no es válido:
+			# Almacenamos en base de datos el intento fallido de autenticación
+			try:
+				# Primero buscamos si ya exite algún registro fallido para esa ip
+				authenticationFailed = AuthenticationFailed.objects.get(ip = ip_address)
+
+			except AuthenticationFailed.DoesNotExist:
+
+				# Si no existe, lo creamos
+				authenticationFailed = AuthenticationFailed()
+				authenticationFailed.ip = ip_address
 
 				# Incrementamos el número de intentos fallidos de autenticació
-				authenticationFailed.attemps = authenticationFailed.attemps + 1
-				authenticationFailed.save()
+			authenticationFailed.attemps = authenticationFailed.attemps + 1
+			authenticationFailed.save()
 
-				# TO DO: Al llegar a cierto número de intentos generar una alerta
+			# TO DO: Al llegar a cierto número de intentos generar una alerta
 
-				return HttpResponseBadRequest("Authentication error")
+			return HttpResponseBadRequest("Authentication error")
 
-		except KeyError:
-			
-			# Si falta alguno de los datos obligatorios saltará la excepción 'KeyError'
-			return HttpResponseBadRequest("Missing mandatory data")
+	except KeyError:
 
-
-	# Update device info
-	if request.method == "PUT":
-		return HttpResponse("Update device info")
-
-	if request.method == "DELETE":
-		return HttpResponse("Delete device")
+		# Si falta alguno de los datos obligatorios saltará la excepción 'KeyError'
+		return HttpResponseBadRequest("Missing mandatory data")
 
