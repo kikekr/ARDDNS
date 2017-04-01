@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
-from app.models import Device
+from app.models import Device, AuthenticationFailed
 from app.util import build_api_key
 
 
@@ -38,6 +38,8 @@ def display_home(request):
 #Permite Desactivar Seguridad csrf para hacer las peticiones ajax
 @csrf_exempt
 def devices(request):
+
+	ip_address = request.META.get('REMOTE_ADDR')
 
 	# Create a new device
 	if request.method == "POST":
@@ -73,7 +75,7 @@ def devices(request):
 					device = Device()
 					device.hostname = hostname
 					device.mac_address = mac_address
-					device.ip = request.META.get('REMOTE_ADDR')
+					device.ip = ip_address
 				#	device.location = 
 					device.last_seen = timezone.now()
 
@@ -84,14 +86,29 @@ def devices(request):
 					return HttpResponse("Device created")
 
 			else:
-				# Si el api key no es válido:
 
-				# TO DO: Incrementar contador de intentos
-				# Al llegar a cierto número de intentos generar una alerta
+				# Si el api key no es válido:
+				# Almacenamos en base de datos el intento fallido de autenticación
+				try:
+					# Primero buscamos si ya exite algún registro fallido para esa ip
+					authenticationFailed = AuthenticationFailed.objects.get(ip = ip_address)
+
+				except AuthenticationFailed.DoesNotExist:
+
+					# Si no existe, lo creamos
+					authenticationFailed = AuthenticationFailed()
+					authenticationFailed.ip = ip_address
+
+				# Incrementamos el número de intentos fallidos de autenticació
+				authenticationFailed.attemps = authenticationFailed.attemps + 1
+				authenticationFailed.save()
+
+				# TO DO: Al llegar a cierto número de intentos generar una alerta
 
 				return HttpResponseBadRequest("Authentication error")
 
 		except KeyError:
+			
 			# Si falta alguno de los datos obligatorios saltará la excepción 'KeyError'
 			return HttpResponseBadRequest("Missing mandatory data")
 

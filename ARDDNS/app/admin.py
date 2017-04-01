@@ -10,3 +10,8 @@ class DeviceAdmin(admin.ModelAdmin):
     fields= ['mac_address','hostname','ip','last_seen', 'location']
 
 admin.site.register(Device,DeviceAdmin)
+
+class AuthenticationFailedAdmin(admin.ModelAdmin):
+    fields= ['ip','attemps']
+
+admin.site.register(AuthenticationFailed,AuthenticationFailedAdmin)

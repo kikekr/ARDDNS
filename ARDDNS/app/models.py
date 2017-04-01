@@ -31,9 +31,8 @@ class Device(models.Model):
 
 		####################################################################
 
-
-
 		return build_api_key(self.hostname, self.mac_address)
+		
 
 	def to_json(self):
 
@@ -57,4 +56,13 @@ class Device(models.Model):
 		data["location"] = self.location
 
 		return json.dumps(data)
+
+
+class AuthenticationFailed(models.Model):
+
+	ip = models.CharField(max_length = 50, null = False, unique = True)
+	attemps = models.IntegerField(null = False, default = 0)
+
+	def __str__(self):
+		return str(self.ip) + ": " + str(self.attemps) + " attemps failed"
 
