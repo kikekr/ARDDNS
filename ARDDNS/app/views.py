@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
-from app.models import Device, AuthenticationFailed, Configuration
+from app.models import Device, AuthenticationFailed, Configuration, IpRegister
 from app.util import build_api_key, update_dns_zone
 
 
@@ -77,12 +77,21 @@ def devices(request):
 						device = Device()
 						device.hostname = hostname
 						device.mac_address = mac_address
-						device.ip = ip_address
 					#	device.location = 
-						device.last_seen = timezone.now()
 
 						device.save()
+
+						ipRegister = IpRegister()
+						ipRegister.ip_address = ip_address
+						ipRegister.date = timezone.now()
+						ipRegister.device = device
+						ipRegister.save()
+
 					except:
+
+						print(traceback.print_exc())
+
+						# TO DO: Return HttpBadRequest
 						return HttpResponse("IP is already in use")
 
 					# Actualizamos el servicio DNS
@@ -102,12 +111,18 @@ def devices(request):
 					try:
 						device.hostname = hostname
 						device.mac_address = mac_address
-						device.ip = ip_address
 						# device.location = 
-						device.last_seen = timezone.now()
 
 						device.save()
+
+						ipRegister = IpRegister()
+						ipRegister.ip_address = ip_address
+						ipRegister.date = timezone.now()
+						ipRegister.device = device
+						ipRegister.save()
+
 					except:
+						# TO DO: Return HttpBadRequest
 						return HttpResponse("IP is already in use")
 
 					# Actualizamos el servicio DNS

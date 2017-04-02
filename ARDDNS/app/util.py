@@ -53,10 +53,10 @@ def update_dns_zone(dnszonefile, hostname, ip_address):
 	for line in f:
 		if hostname in line:
 			# Si lo hay lo reemplazamos y salimos de la función
-			line = "ubuntu	IN	A		" + str(ip_address)
+			line = "ubuntu	IN	A		" + str(ip_address) + "\n"
 			return
 
 	# Si no lo hay lo añadimos al final
-	f.writelines(str(hostname) + "	IN	A		" + str(ip_address))
+	f.writelines(str(hostname) + "	IN	A		" + str(ip_address) + "\n")
 
 	f.close()

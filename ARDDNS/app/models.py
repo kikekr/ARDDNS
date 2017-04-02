@@ -19,8 +19,6 @@ class Device(models.Model):
 
 	mac_address = models.CharField(max_length = 50, null = False, unique = True)
 	hostname = models.CharField(max_length = 50, null = False)
-	ip = models.CharField(max_length = 50, null = True, unique = True)
-	last_seen = models.DateTimeField(null = True)
 	location = models.CharField(max_length = 100, null = True)
 
 	def __str__(self):
@@ -60,11 +58,22 @@ class Device(models.Model):
 		data = {}
 		data["mac_address"] = self.mac_address
 		data["hostname"] = self.hostname
-		data["ip"] = self.ip
 		# data["last_seen"] = self.last_seen
-		data["location"] = self.location
 
 		return json.dumps(data)
+
+
+class IpRegister(models.Model):
+
+
+	device = models.ForeignKey('Device')
+	ip_address = models.CharField(max_length = 50, null = False)
+	date = models.DateTimeField(null = False)
+
+	def __str__(self):
+		return str(self.device) + " - " + str(self.ip_address) + " at " + str(self.date)
+
+	# TODO: Añadir restricción de identidad device-ip (claves primarias)
 
 
 class AuthenticationFailed(models.Model):
