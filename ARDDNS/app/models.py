@@ -6,6 +6,15 @@ import json
 
 # Create your models here.
 
+
+class Configuration(models.Model):
+
+	num_attemps_to_alarm = models.IntegerField(null = False, default = 3)
+	dnszonefile = models.CharField(max_length = 100, help_text = "Ubicación del fichero de zona DNS", null = False)
+
+	def __str__(self):
+		return "Configuration"
+
 class Device(models.Model):
 
 	mac_address = models.CharField(max_length = 50, null = False, unique = True)

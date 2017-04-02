@@ -15,3 +15,8 @@ class AuthenticationFailedAdmin(admin.ModelAdmin):
     fields= ['ip','attemps']
 
 admin.site.register(AuthenticationFailed,AuthenticationFailedAdmin)
+
+class ConfigurationAdmin(admin.ModelAdmin):
+    fields= ['num_attemps_to_alarm','dnszonefile']
+
+admin.site.register(Configuration,ConfigurationAdmin)
