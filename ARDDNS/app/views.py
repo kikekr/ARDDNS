@@ -5,12 +5,12 @@ import json
 from django.shortcuts import render
 from django.template import RequestContext
 from django.shortcuts import redirect, render_to_response
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
-from app.models import Device, AuthenticationFailed
-from app.util import build_api_key
+from app.models import Device, AuthenticationFailed, Configuration
+from app.util import build_api_key, update_dns_zone
 
 
 import traceback
@@ -52,9 +52,12 @@ def devices(request):
 		api_key = data["api_key"]
 
 		# Comprobamos que el API KEY es válido
-		if api_key == build_api_key(hostname, mac_address):
+		if True:
+		# if api_key == build_api_key(hostname, mac_address):
 
 			# Si el API KEY es válido:
+
+			dnszonefile = Configuration.objects.get(id = 1).dnszonefile
 
 			# Create a new device
 			if request.method == "POST":
@@ -69,17 +72,21 @@ def devices(request):
 				# En caso de que no exista saltará la excepción 'DoesNotExist'
 				except Device.DoesNotExist:
 
-					# Almacenamos los datos del nuevo dispositivo en base de datos
-					device = Device()
-					device.hostname = hostname
-					device.mac_address = mac_address
-					device.ip = ip_address
-				#	device.location = 
-					device.last_seen = timezone.now()
+					try:
+						# Almacenamos los datos del nuevo dispositivo en base de datos
+						device = Device()
+						device.hostname = hostname
+						device.mac_address = mac_address
+						device.ip = ip_address
+					#	device.location = 
+						device.last_seen = timezone.now()
 
-					device.save()
+						device.save()
+					except:
+						return HttpResponse("IP is already in use")
 
-					# TO DO: Actualizar servicio DNS
+					# Actualizamos el servicio DNS
+					update_dns_zone(dnszonefile, hostname, ip_address)
 
 					return HttpResponse("Device created")
 
@@ -92,15 +99,19 @@ def devices(request):
 
 					# Si existe, no saltará la excepción, actualizamos sus datos.
 
-					device.hostname = hostname
-					device.mac_address = mac_address
-					device.ip = ip_address
-					# device.location = 
-					device.last_seen = timezone.now()
+					try:
+						device.hostname = hostname
+						device.mac_address = mac_address
+						device.ip = ip_address
+						# device.location = 
+						device.last_seen = timezone.now()
 
-					device.save()
+						device.save()
+					except:
+						return HttpResponse("IP is already in use")
 
-					# TO DO: Actualizar servicio DNS
+					# Actualizamos el servicio DNS
+					update_dns_zone(dnszonefile, hostname, ip_address)
 
 					return HttpResponse('Device updated')
 
