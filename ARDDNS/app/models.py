@@ -10,7 +10,7 @@ import json
 class Configuration(models.Model):
 
 	num_attemps_to_alarm = models.IntegerField(null = False, default = 3)
-	domain = models.CharField(max_length = 50, help_text = "Nombre del dominio", null = False)
+	domain = models.CharField(max_length = 50, help_text = "Nombre del dominio", null = False	)
 	dnszonefile = models.CharField(max_length = 100, help_text = "Ubicación del fichero de zona DNS", null = False)
 
 	def __str__(self):
@@ -75,7 +75,10 @@ class IpRegister(models.Model):
 	def __str__(self):
 		return str(self.device) + " - " + str(self.ip_address) + " at " + str(self.date)
 
-	# TODO: Añadir restricción de identidad device-ip (claves primarias)
+	class Meta:
+		unique_together = (
+			('ip_address', 'device')
+		)
 
 
 class AuthenticationFailed(models.Model):
