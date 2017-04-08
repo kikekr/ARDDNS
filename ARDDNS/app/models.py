@@ -73,8 +73,8 @@ class IpRegister(models.Model):
 	date = models.DateTimeField(null = False)
 
 	def __str__(self):
-		if location != None:
-			return str(self.device) + " - " + str(self.ip_address) + " ( " + self.location.country_code + ") at " + str(self.date)
+		if self.location != None:
+			return str(self.device) + " - " + str(self.ip_address) + " ( " + str(self.location.country_code) + ") at " + str(self.date)
 		else:
 			return str(self.device) + " - " + str(self.ip_address) + " at " + str(self.date)
 
@@ -95,6 +95,12 @@ class Location(models.Model):
 	latitude = models.FloatField(null = True)
 	longitude = models.FloatField(null = True)
 	metro_code = models.IntegerField(null = True)
+
+	def __str__(self):
+		if ((self.city != None) and (self.region_name != None) and (self.country_name != None)):
+			return str(self.city) + " - " + str(self.region_name) + " (" + str(self.country_name) + ")"
+		else:
+			return None
 
 
 class AuthenticationFailed(models.Model):
