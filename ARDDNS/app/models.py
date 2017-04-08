@@ -19,7 +19,6 @@ class Device(models.Model):
 
 	mac_address = models.CharField(max_length = 50, null = False, unique = True)
 	hostname = models.CharField(max_length = 50, null = False)
-	location = models.CharField(max_length = 100, null = True)
 	alive = models.BooleanField(null = False, default = False)
 
 	def __str__(self):
@@ -69,6 +68,7 @@ class IpRegister(models.Model):
 
 	device = models.ForeignKey('Device')
 	ip_address = models.CharField(max_length = 50, null = False)
+	location = models.CharField(max_length = 100, null = True)
 	date = models.DateTimeField(null = False)
 
 	def __str__(self):
