@@ -7,7 +7,7 @@ from app.models import *
 
 
 class DeviceAdmin(admin.ModelAdmin):
-    fields= ['mac_address','hostname', 'location']
+    fields= ['mac_address','hostname', 'alive']
 
 admin.site.register(Device,DeviceAdmin)
 
@@ -25,3 +25,8 @@ class IpRegisterAdmin(admin.ModelAdmin):
     fields= ['ip_address','device', 'date']
 
 admin.site.register(IpRegister,IpRegisterAdmin)
+
+class LocationAdmin(admin.ModelAdmin):
+    fields= ['country_code','country_name', 'region_code', 'region_name', 'city', 'zip_code', 'time_zone', 'latitude', 'longitude', 'metro_code']
+
+admin.site.register(Location,LocationAdmin)
