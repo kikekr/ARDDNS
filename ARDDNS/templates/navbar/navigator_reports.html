@@ -1,0 +1,78 @@
+{% extends "navbar/bootstrap.html"%}
+{% load staticfiles %}
+{% block title %}Taranis{% endblock %}
+{% block head %}
+    <script src="{% static 'js/rq_tasks.js' %}"></script>
+    <script src="{% static 'js/firmware_update.js' %}"></script>
+    <script>
+        $(function(){
+            //Check all button
+            $(document).on('click', '[data-check-task-url]', function(event) {
+                var url = $(event.target).attr('data-check-task-url');
+                $.getJSON(url, null, function(result) {
+                    if (result) {
+                        $('[data-ajax-loader]').removeClass('hide');
+                        check_task_until_ready(result.key, 1000, function() { window.location.reload(true) });
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+      /**
+      * Progress bars with centered text
+      */
+
+        .progress {
+            position: relative;
+        }
+
+        .progress span {
+            position: absolute;
+            display: block;
+            width: 100%;
+            color: black;
+        }
+    </style>
+{% endblock %}
+{% block navigator_v %}
+
+<div class="container-fluid">
+  <div id="mySidenav" class="sidenav">
+    <img src="{{ STATIC_URL }}images/logo-principal.png" width="130" height="130" alt="Logo" class="img-responsive">
+    <ul class="nav nav-pills nav-stacked">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Resultados<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'report-concentrators-show' %}">Por concentrador</a></li>
+            <li class="divider"></li>
+            <li><a href="{% url 'show-tasks' %}">Por contador</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="{% url 'request-show-list' %}">Peticiones STG</a>
+    </li>
+    <li>
+        <a href="#">Oportunidades</a></a>
+    </li>
+      <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Estadísticas<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+              <li><a href="{% url 'concentrator-statistics' %}">Por concentrador</a></li>
+              <li class="divider"></li>
+              <li><a href="{% url 'meter-statistics-reports' id_month=0 %}">Por contador</a></li>
+          </ul>
+      </li>
+      <a href="#">Contact</a>
+      </ul>
+</div>
+
+<!-- Use any element to open the sidenav -->
+
+
+  <div class="main">
+    {% block content %}{% endblock %}
+  </div>
+
+</div>
+{% endblock %}
