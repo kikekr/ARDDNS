@@ -7,7 +7,7 @@ from app.models import *
 
 
 class DeviceAdmin(admin.ModelAdmin):
-    fields= ['mac_address','hostname','ip','last_seen', 'location']
+    fields= ['mac_address','hostname', 'location']
 
 admin.site.register(Device,DeviceAdmin)
 

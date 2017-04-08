@@ -1,23 +1,72 @@
-{% extends "navbar.html"%}
+{% extends "navbar/navigator_devices.html"%}
+{% load staticfiles %}
+{% block content %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item active">Devices</li>
+</ol>
 
-{% block 'head' %}
-<script src="{{STATIC_URL}}js/monolitosScan.js"></script>
-{% endblock %}
+{% include 'pagination.html' %}
 
-{% block 'content' %}
-    {% load i18n %}
+<div class="row">
+
+    <div class="col-md-6">
+      <span class="pull-left">
+      <h2>Device list</h2>
+      <span>
+    </div>
+    <div class="col-md-6">
+      <span class="pull-right">
+        <a href="{% url 'create-device' %}" class="btn btn-default glyphicon glyphicon-plus" role="button">
+        </a>
+      </span>
+      <span class="pull-right">
+        <button class="btn btn-success" data-check-task-url="{% url 'check-all-devices' %}">Check all</button>
+        </a>
+      </span>
+    </div>
+  </div>
 
 
-<div class="container">
+<div><img class="hide" width="20" height="20" src="{% static 'images/ajax-loader.gif' %}" alt="loading-logo" data-ajax-loader></div>
 
-    <div class="page-header">
-        <h1>{% trans "Configuración de fecha y hora del sistema" %}</h1>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>ID</th>
+<th>MAC address</th>
+<th>Hostname</th>
+<th>Location</th>
+<th>IP</th>
+<th>last_seen</th>
+<th>Alive</th>
 
-      </div>
+</tr>
+<tr>
 
+</tr>
+</thead>
+<tbody>
+{% for device in devices %}
+<tr data-device-id="{{ device.id }}" data-js-fw-url="{% url 'info-device' pk=device.id %}" onclick="getElementsByClassName('details')[0].click()" style="cursor: pointer">
+    <td><img alt="telecon-logo" width="20" height="20" src="{% static 'images/telecon.ico' %}"> {{ device.id }}</td>
+    <td>{{ device.mac_address }}</td>
+    <td>{{ device.hostname }}</td>
+    <td><a href="{% url 'details-device' id_device=device.id %}" class="details">{{ device.location }}</a></td>
+    <td>{{ device.ip }}</td>
+    <td>{{ device.last_seen }}</td>
+    <td>{{ device.alive }}</td>
+    <td>
+        <a href="{% url 'modify-device' pk=device.id %}" class="btn btn-primary btn-xs">Editar</a>
+        <a href="{% url 'details-device' id_device=device.id %}" class="btn btn-warning btn-xs">Detalles</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<div class="row">
+<div class="col-xs-5"></div>
+<div class="col-xs-4">
+{% include 'pagination.html' %}
 </div>
-
-
-
-
+<div class="col-xs-3"></div>
+</div>
 {% endblock %}

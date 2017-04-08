@@ -5,8 +5,9 @@ import json
 from django.shortcuts import render
 from django.template import RequestContext
 from django.shortcuts import redirect, render_to_response
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 
 from app.models import Device, AuthenticationFailed, Configuration, IpRegister
@@ -21,12 +22,58 @@ import traceback
 
 # VIEWS
 
+
 # Home page
 def display_home(request):
 
+	print("Display home")
+
 	template = 'index.html'
 	context = {}
+
+	context["devices"] = Device.objects.all()
+
 	return render_to_response(template, context,context_instance=RequestContext(request))
+
+# Create device
+def create_device(request):
+	pass
+
+# Check devices
+def check_all_devices(request):
+	pass
+
+# Device information
+def info_device(request):
+	pass
+
+# Device details
+def details_device(request):
+	pass
+
+# Modify device
+def modify_device(request):
+	pass
+
+# Login page
+def custom_login(request):
+    logout(request)
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            debug = login(request, user)
+            url_param = request.GET.get('next', '/')
+            return redirect(url_param)
+    return render_to_response('login.html', context_instance=RequestContext(request))
+
+# Logout page
+def auth_logout(request):
+    logout(request)
+    return redirect('/')
 
 
 
