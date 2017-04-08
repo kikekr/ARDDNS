@@ -11,7 +11,7 @@
 
     <div class="col-md-6">
       <span class="pull-left">
-      <h2>IP registers for device {{ device.hostname }} - ({{ device.mac_address }}) </h2>
+      <h2> Location details </h2>
       <span>
     </div>
     <div class="col-md-6">
@@ -44,11 +44,7 @@
 <tbody>
 {% for register in device.ip_registers %}
 <tr data-device-id="{{ device.id }}" data-js-fw-url="{% url 'info-device' id_device=device.id %}" onclick="getElementsByClassName('details')[0].click()" style="cursor: pointer">
-    {% if register.location.country_name %}
-    <td><a href="{% url 'show-location' id_location=register.location.id %}" class="details">{{ register.location.country_name }}</a></td>
-    {% else %}
-    <td><a class="details">{{ register.location.country_name }}</a></td>
-    {% endif %}
+    <td><a href="{% url 'details-device' id_device=device.id %}" class="details">{{ register.location }}</a></td>
     <td>{{ register.ip_address }}</td>
     <td>{{ register.date }}</td>
 </tr>

@@ -65,6 +65,20 @@ def details_device(request, id_device):
 		context["device"] = device
 		return render_to_response(template, context,context_instance=RequestContext(request))
 	except:
+		print(traceback.print_exc())
+		return HttpResponseNotFound()
+
+
+def show_location(request, id_location):
+	
+	template = 'show_location.html'
+	context = {}
+
+	try:
+		location = Location.objects.get(id = id_location)
+		context["location"] = location
+		return render_to_response(template, context, context_instance=RequestContext(request))
+	except:
 		return HttpResponseNotFound()
 
 	

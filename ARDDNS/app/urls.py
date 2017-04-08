@@ -17,9 +17,11 @@ urlpatterns = patterns('',
 
                         url(r'^devices/create/$', 'app.views.create_device', name='create-device'),
                         url(r'^devices/check/$', 'app.views.create_device', name='check-all-devices'),
-                        url(r'^devices/info/(?P<pk>\d+)$', 'app.views.info_device', name='info-device'),
-    					url(r'^devices/details/(?P<id_device>\d+)$$', 'app.views.details_device', name='details-device'),
-					    url(r'^device/modify/(?P<pk>\d+)$', 'app.views.modify_device', name='modify-device'),
+                        url(r'^devices/info/(?P<id_device>\d+)$', 'app.views.info_device', name='info-device'),
+    					url(r'^devices/details/(?P<id_device>\d+)$', 'app.views.details_device', name='details-device'),
+					    url(r'^device/modify/(?P<id_device>\d+)$', 'app.views.modify_device', name='modify-device'),
+
+					    url(r'^location/show/(?P<id_location>\d+)$', 'app.views.show_location', name='show-location'),
 
 
                         #URL's de api
