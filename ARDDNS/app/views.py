@@ -10,10 +10,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 
-from app.models import Device, AuthenticationFailed, Configuration, IpRegister
+from app.models import Device, AuthenticationFailed, Configuration, IpRegister, Location
 from app.util import build_api_key, update_dns_zone
+from app.ip_geolocation import requestGeoIp
 
-
+import pandas as pd
 import traceback
 
 
@@ -25,8 +26,6 @@ import traceback
 
 # Home page
 def display_home(request):
-
-	print("Display home")
 
 	template = 'index.html'
 	context = {}
@@ -96,6 +95,68 @@ def auth_logout(request):
 
 
 
+
+###########################################################################################
+
+def store_device_data(hostname, mac_address, ip_address):
+
+	# Almacenamos los datos del nuevo dispositivo en base de datos
+	device = Device()
+	device.hostname = hostname
+	device.mac_address = mac_address
+
+	device.save()
+
+	ipRegister = IpRegister()
+	ipRegister.ip_address = ip_address
+	ipRegister.date = timezone.now()
+	ipRegister.device = device
+
+	try:
+		json_ipinfo = requestGeoIp(ip_address)
+
+		print(json_ipinfo)
+		
+		location = Location()
+		location.country_code = json_ipinfo["country_code"]
+		location.country_name = json_ipinfo["country_code"]
+		location.region_code = json_ipinfo["country_code"]
+		location.region_name = json_ipinfo["country_code"]
+		location.city = json_ipinfo["country_code"]
+
+		try:
+			location.zip_code = int(json_ipinfo["country_code"])
+		except:
+			location.zip_code = None
+
+		location.time_zone = json_ipinfo["country_code"]
+		
+		try:
+			location.latitude = float(json_ipinfo["country_code"])
+		except:
+			location.latitude = None
+
+		try:	
+			location.longitude = float(json_ipinfo["country_code"])
+		except:
+			location.longitude = None
+
+		try:
+			location.metro_code = int(json_ipinfo["country_code"])
+		except:
+			location.metro_code = None
+
+		location.save()
+		print(location)
+		ipRegister.location = location
+	
+	except:
+		print(traceback.print_exc())
+
+	ipRegister.save()
+
+
+
 ###########################################################################################
 
 
@@ -139,22 +200,8 @@ def devices(request):
 				except Device.DoesNotExist:
 
 					try:
-						# Almacenamos los datos del nuevo dispositivo en base de datos
-						device = Device()
-						device.hostname = hostname
-						device.mac_address = mac_address
-
-						device.save()
-
-						ipRegister = IpRegister()
-						ipRegister.ip_address = ip_address
-						ipRegister.date = timezone.now()
-						ipRegister.device = device
-						# ipRegister.location = 
-						ipRegister.save()
-
+						store_device_data(hostname, mac_address, ip_address)
 					except:
-
 						print(traceback.print_exc())
 
 						# TO DO: Return HttpBadRequest
@@ -175,18 +222,7 @@ def devices(request):
 					# Si existe, no saltará la excepción, actualizamos sus datos.
 
 					try:
-						device.hostname = hostname
-						device.mac_address = mac_address 
-
-						device.save()
-
-						ipRegister = IpRegister()
-						ipRegister.ip_address = ip_address
-						ipRegister.date = timezone.now()
-						ipRegister.device = device
-						# ipRegister.location = 
-						ipRegister.save()
-
+						store_device_data(hostname, mac_address, ip_address)
 					except:
 						# TO DO: Return HttpBadRequest
 						return HttpResponse("IP is already in use")
