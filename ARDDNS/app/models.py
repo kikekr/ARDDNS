@@ -20,6 +20,7 @@ class Device(models.Model):
 	mac_address = models.CharField(max_length = 50, null = False, unique = True)
 	hostname = models.CharField(max_length = 50, null = False)
 	location = models.CharField(max_length = 100, null = True)
+	alive = models.BooleanField(null = False, default = False)
 
 	def __str__(self):
 		return self.hostname
