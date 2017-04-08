@@ -1,0 +1,60 @@
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    margin-top: 50px;
+    width: 200px; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #008d36;   /* "white"*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 5px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    border-right: 1px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 5px 5px 5px 15px;
+    text-decoration: none;
+    font-size: 19px;
+    color:  #fff;
+    display: block;
+    transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+    color: #111;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+.main {
+    margin-left: 250px;
+    margin-top:0px;
+    transition: margin-left .5s;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+#Hmenu {
+  background-color: rgba(0, 0, 13, 0.6);
+  color: rgba(3, 149, 0, 0.2);
+}
+#sheet_concentrator {
+  border-style: dotted dashed solid;
+  padding-top: 1000px;
+}
