@@ -54,8 +54,21 @@ def info_device(request):
 	pass
 
 # Device details
-def details_device(request):
-	pass
+def details_device(request, id_device):
+
+	template = 'device_details.html'
+	context = {}
+
+	try:
+		device = Device.objects.get(id = id_device)
+		ip_registers = IpRegister.objects.filter(device = device).order_by("-date")
+		setattr(device, "ip_registers", ip_registers)
+		context["device"] = device
+		return render_to_response(template, context,context_instance=RequestContext(request))
+	except:
+		return HttpResponseNotFound()
+
+	
 
 # Modify device
 def modify_device(request):
@@ -130,7 +143,6 @@ def devices(request):
 						device = Device()
 						device.hostname = hostname
 						device.mac_address = mac_address
-					#	device.location = 
 
 						device.save()
 
@@ -138,6 +150,7 @@ def devices(request):
 						ipRegister.ip_address = ip_address
 						ipRegister.date = timezone.now()
 						ipRegister.device = device
+						# ipRegister.location = 
 						ipRegister.save()
 
 					except:
@@ -163,8 +176,7 @@ def devices(request):
 
 					try:
 						device.hostname = hostname
-						device.mac_address = mac_address
-						# device.location = 
+						device.mac_address = mac_address 
 
 						device.save()
 
@@ -172,6 +184,7 @@ def devices(request):
 						ipRegister.ip_address = ip_address
 						ipRegister.date = timezone.now()
 						ipRegister.device = device
+						# ipRegister.location = 
 						ipRegister.save()
 
 					except:

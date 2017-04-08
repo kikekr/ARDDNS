@@ -1,0 +1,61 @@
+{% extends "navbar/navigator_devices.html"%}
+{% load staticfiles %}
+{% block content %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item active">Devices</li>
+</ol>
+
+{% include 'pagination.html' %}
+
+<div class="row">
+
+    <div class="col-md-6">
+      <span class="pull-left">
+      <h2>IP registers for device {{ device.hostname }} - ({{ device.mac_address }}) </h2>
+      <span>
+    </div>
+    <div class="col-md-6">
+      <span class="pull-right">
+        <a href="{% url 'create-device' %}" class="btn btn-default glyphicon glyphicon-plus" role="button">
+        </a>
+      </span>
+      <span class="pull-right">
+        <button class="btn btn-success" data-check-task-url="{% url 'check-all-devices' %}">Check all</button>
+        </a>
+      </span>
+    </div>
+  </div>
+
+
+<div><img class="hide" width="20" height="20" src="{% static 'images/ajax-loader.gif' %}" alt="loading-logo" data-ajax-loader></div>
+
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Location</th>
+<th>IP</th>
+<th>Last seen</th>
+
+</tr>
+<tr>
+
+</tr>
+</thead>
+<tbody>
+{% for register in device.ip_registers %}
+<tr data-device-id="{{ device.id }}" data-js-fw-url="{% url 'info-device' pk=device.id %}" onclick="getElementsByClassName('details')[0].click()" style="cursor: pointer">
+    <td><a href="{% url 'details-device' id_device=device.id %}" class="details">{{ register.location }}</a></td>
+    <td>{{ register.ip_address }}</td>
+    <td>{{ register.date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<div class="row">
+<div class="col-xs-5"></div>
+<div class="col-xs-4">
+{% include 'pagination.html' %}
+</div>
+<div class="col-xs-3"></div>
+</div>
+{% endblock %}
