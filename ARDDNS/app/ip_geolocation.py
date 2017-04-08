@@ -5,7 +5,7 @@ import requests
 from app.models import IpRegister
 
 def requestGeoIp(IP):
-    response = requests.get("https://freegeoip.net/json/" + IP)
+    response = requests.get("http://freegeoip.net/json/" + IP)
 
     if (response.status_code == 200):
         data = json.loads(response.text.encode('utf-8'))
@@ -19,8 +19,6 @@ def resolveLocation(ipAddress):
         return json.loads(query.location)
     except IpRegister.DoesNotExist:
         jsResult = requestGeoIp(ipAddress)
-        ipReg = IpRegister(ip_address = ipAddress, location = json.dumps(jsResult))
-        ipReg.save()
         return jsResult
 
 def getLocationByList(IPList):
@@ -47,4 +45,4 @@ def getLocationByList(IPList):
     for t in threadList:
         t.join()
 
-return filter(lambda x: x is not None, IPInfo)
+    return filter(lambda x: x is not None, IPInfo)
