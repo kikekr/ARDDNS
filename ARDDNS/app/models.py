@@ -59,7 +59,7 @@ class Device(models.Model):
 		data = {}
 		data["mac_address"] = self.mac_address
 		data["hostname"] = self.hostname
-		# data["last_seen"] = self.last_seen
+		data["alive"] = self.last_seen
 
 		return json.dumps(data)
 
@@ -69,16 +69,32 @@ class IpRegister(models.Model):
 
 	device = models.ForeignKey('Device')
 	ip_address = models.CharField(max_length = 50, null = False)
-	location = models.CharField(max_length = 100, null = True)
+	location = models.ForeignKey('Location', null = True)
 	date = models.DateTimeField(null = False)
 
 	def __str__(self):
-		return str(self.device) + " - " + str(self.ip_address) + " at " + str(self.date)
+		if location != None:
+			return str(self.device) + " - " + str(self.ip_address) + " ( " + self.location.country_code + ") at " + str(self.date)
+		else:
+			return str(self.device) + " - " + str(self.ip_address) + " at " + str(self.date)
 
 	class Meta:
 		unique_together = (
 			('ip_address', 'device')
 		)
+
+class Location(models.Model):
+
+	country_code = models.CharField(max_length = 5, null = True)
+	country_name = models.CharField(max_length = 50, null = True)
+	region_code = models.CharField(max_length = 50, null = True)	
+	region_name = models.CharField(max_length = 50, null = True)
+	city = models.CharField(max_length = 50, null = True)
+	zip_code = models.IntegerField(null = True)
+	time_zone = models.CharField(max_length = 50, null = True)
+	latitude = models.FloatField(null = True)
+	longitude = models.FloatField(null = True)
+	metro_code = models.IntegerField(null = True)
 
 
 class AuthenticationFailed(models.Model):
