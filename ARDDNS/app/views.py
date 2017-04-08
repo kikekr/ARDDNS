@@ -31,7 +31,13 @@ def display_home(request):
 	template = 'index.html'
 	context = {}
 
-	context["devices"] = Device.objects.all()
+	devices = Device.objects.all()
+
+	for device in devices:
+		last_ip_register = IpRegister.objects.filter(device = device).order_by("-date").first()
+		setattr(device, "last_ip_register", last_ip_register)
+
+	context["devices"] = devices
 
 	return render_to_response(template, context,context_instance=RequestContext(request))
 

@@ -52,8 +52,8 @@
     <td>{{ device.mac_address }}</td>
     <td>{{ device.hostname }}</td>
     <td><a href="{% url 'details-device' id_device=device.id %}" class="details">{{ device.location }}</a></td>
-    <td>{{ device.ip }}</td>
-    <td>{{ device.last_seen }}</td>
+    <td>{{ device.last_ip_register.ip_address }}</td>
+    <td>{{ device.last_ip_register.date }}</td>
     <td>{{ device.alive }}</td>
     <td>
         <a href="{% url 'modify-device' pk=device.id %}" class="btn btn-primary btn-xs">Editar</a>
