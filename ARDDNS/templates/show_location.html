@@ -31,24 +31,30 @@
 
 <table class="table table-striped">
 <thead>
-<tr>
-<th>Location</th>
-<th>IP</th>
-<th>Last seen</th>
 
-</tr>
-<tr>
+<th>Country code</th>
+<th>Country name</th>
+<th>Region code</th>
+<th>Region name</th>
+<th>City</th>
+<th>Zip code</th>
+<th>Time zone</th>
+<th>Latitude</th>
+<th>Longitude</th>
 
-</tr>
 </thead>
 <tbody>
-{% for register in device.ip_registers %}
-<tr data-device-id="{{ device.id }}" data-js-fw-url="{% url 'info-device' id_device=device.id %}" onclick="getElementsByClassName('details')[0].click()" style="cursor: pointer">
-    <td><a href="{% url 'details-device' id_device=device.id %}" class="details">{{ register.location }}</a></td>
-    <td>{{ register.ip_address }}</td>
-    <td>{{ register.date }}</td>
-</tr>
-{% endfor %}
+
+<th>{{ location.country_code }}</th>
+<th>{{ location.country_name }}</th>
+<th>{{ location.region_code }}</th>
+<th>{{ location.region_name }}</th>
+<th>{{ location.city }}</th>
+<th>{{ location.zip_code }}</th>
+<th>{{ location.time_zone }}</th>
+<th>{{ location.latitude }}</th>
+<th>{{ location.longitude }}</th>
+
 </tbody>
 </table>
 <div class="row">
