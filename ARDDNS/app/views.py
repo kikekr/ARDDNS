@@ -132,30 +132,30 @@ def store_device_data(hostname, mac_address, ip_address):
 		
 		location = Location()
 		location.country_code = json_ipinfo["country_code"]
-		location.country_name = json_ipinfo["country_code"]
-		location.region_code = json_ipinfo["country_code"]
-		location.region_name = json_ipinfo["country_code"]
-		location.city = json_ipinfo["country_code"]
+		location.country_name = json_ipinfo["country_name"]
+		location.region_code = json_ipinfo["region_code"]
+		location.region_name = json_ipinfo["region_name"]
+		location.city = json_ipinfo["city"]
 
 		try:
-			location.zip_code = int(json_ipinfo["country_code"])
+			location.zip_code = int(json_ipinfo["zip_code"])
 		except:
 			location.zip_code = None
 
-		location.time_zone = json_ipinfo["country_code"]
+		location.time_zone = json_ipinfo["time_zone"]
 		
 		try:
-			location.latitude = float(json_ipinfo["country_code"])
+			location.latitude = float(json_ipinfo["latitude"])
 		except:
 			location.latitude = None
 
 		try:	
-			location.longitude = float(json_ipinfo["country_code"])
+			location.longitude = float(json_ipinfo["longitude"])
 		except:
 			location.longitude = None
 
 		try:
-			location.metro_code = int(json_ipinfo["country_code"])
+			location.metro_code = int(json_ipinfo["metro_code"])
 		except:
 			location.metro_code = None
 
