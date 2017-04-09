@@ -96,12 +96,6 @@ class Location(models.Model):
 	longitude = models.FloatField(null = True)
 	metro_code = models.IntegerField(null = True)
 
-	def __str__(self):
-		if ((self.city != None) and (self.region_name != None) and (self.country_name != None)):
-			return str(self.city) + " - " + str(self.region_name) + " (" + str(self.country_name) + ")"
-		else:
-			return None
-
 
 class AuthenticationFailed(models.Model):
 
