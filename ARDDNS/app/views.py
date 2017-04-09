@@ -14,7 +14,6 @@ from app.models import Device, AuthenticationFailed, Configuration, IpRegister, 
 from app.util import build_api_key, update_dns_zone
 from app.ip_geolocation import requestGeoIp
 
-import pandas as pd
 import traceback
 
 
