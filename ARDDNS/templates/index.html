@@ -48,7 +48,6 @@
 <tbody>
 {% for device in devices %}
 <tr data-device-id="{{ device.id }}" data-js-fw-url="{% url 'info-device' id_device=device.id %}" onclick="getElementsByClassName('details')[0].click()" style="cursor: pointer">
-    <td><img alt="telecon-logo" width="20" height="20" src="{% static 'images/telecon.ico' %}"> {{ device.id }}</td>
     <td>{{ device.mac_address }}</td>
     <td>{{ device.hostname }}</td>
     <td><a href="{% url 'details-device' id_device=device.id %}" class="details">{{ device.last_ip_register.location.country_name }}</a></td>

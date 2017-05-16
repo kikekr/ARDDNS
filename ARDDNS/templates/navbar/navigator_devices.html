@@ -1,6 +1,6 @@
 {% extends "navbar/bootstrap.html"%}
 {% load staticfiles %}
-{% block title %}Taranis{% endblock %}
+{% block title %}ARDynDNS{% endblock %}
 {% block head %}
     <script src="{% static 'js/rq_tasks.js' %}"></script>
     <script src="{% static 'js/firmware_update.js' %}"></script>
@@ -39,7 +39,6 @@
 
 <div class="container-fluid">
   <div id="mySidenav" class="sidenav">
-    <img src="{{ STATIC_URL }}images/logo-principal.png" width="130" height="130" alt="Logo" class="img-responsive">
       <a href="{% url 'show-devices' %}">Devices</a>
       <a href="#">Estadísticas</a>
       <a href="#">Mapa</a>
