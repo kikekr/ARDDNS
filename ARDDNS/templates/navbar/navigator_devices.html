@@ -1,0 +1,55 @@
+{% extends "navbar/bootstrap.html"%}
+{% load staticfiles %}
+{% block title %}ARDynDNS{% endblock %}
+{% block head %}
+    <script src="{% static 'js/rq_tasks.js' %}"></script>
+    <script src="{% static 'js/firmware_update.js' %}"></script>
+    <script>
+        $(function(){
+            //Check all button
+            $(document).on('click', '[data-check-task-url]', function(event) {
+                var url = $(event.target).attr('data-check-task-url');
+                $.getJSON(url, null, function(result) {
+                    if (result) {
+                        $('[data-ajax-loader]').removeClass('hide');
+                        check_task_until_ready(result.key, 1000, function() { window.location.reload(true) });
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+      /**
+      * Progress bars with centered text
+      */
+
+        .progress {
+            position: relative;
+        }
+
+        .progress span {
+            position: absolute;
+            display: block;
+            width: 100%;
+            color: black;
+        }
+    </style>
+{% endblock %}
+{% block navigator_v %}
+
+<div class="container-fluid">
+  <div id="mySidenav" class="sidenav">
+      <a href="{% url 'show-devices' %}">Devices</a>
+      <a href="#">Estadísticas</a>
+      <a href="#">Mapa</a>
+</div>
+
+<!-- Use any element to open the sidenav -->
+
+
+  <div class="main">
+    {% block content %}{% endblock %}
+  </div>
+
+</div>
+{% endblock %}

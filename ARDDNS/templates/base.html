@@ -1,0 +1,96 @@
+{% load tz %}
+{% timezone "Europe/Madrid" %}
+{% csrf_token %}
+<!DOCTYPE html>
+<head>
+        <meta charset="utf-8">
+		{# <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> #}
+		<title>{% block title %}Taranis{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}images/triskel.png"/>
+	    <!-- Bootstrap -->
+		<!-- <link href="{{STATIC_URL}}css/bootstrap.min.css" rel="stylesheet"> -->
+		<link href="{{STATIC_URL}}bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}css/telecon.css" rel="stylesheet">
+		<script src="{{STATIC_URL}}js/vendor/jquery-1.11.1.min.js"></script>
+        <script src="{{STATIC_URL}}js/vendor/jquery-ui.min.js"></script>
+        <link href="{{STATIC_URL}}css/jquery-ui.min.css" rel="stylesheet">
+		<script src="{{STATIC_URL}}js/vendor/jquery.cookie.js"></script>
+		<script src="{{STATIC_URL}}bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script src="{{STATIC_URL}}js/csrf.js"></script>
+        <script src="{{STATIC_URL}}js/taranis/stg_client.js"></script>
+
+        <script>
+
+        // request permission on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          if (!Notification) {
+            alert('Desktop notifications not available in your browser. Try Chromium.'); 
+            return;
+          }
+
+          if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        });
+        </script>
+
+        <script>
+        function notifyMe() {
+          if (Notification.permission !== "granted")
+            Notification.requestPermission();
+          else {
+            var notification = new Notification('Notification title', {
+              icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+              body: "Hey there! You've been notified!",
+            });
+
+            notification.onclick = function () {
+              window.open("http://stackoverflow.com/a/13328397/1269037");      
+            };
+
+          }
+          </script>
+
+        <script>
+
+        check_events =  setInterval(function(){
+
+            notifyMe()
+
+          get_events(null,function(data){
+            
+            notifyMe()
+            
+          });
+        }, 2000);
+
+        </script>
+
+		<style type="text/css">
+            body {
+                padding-top: 70px;
+                background-color: rgb(245, 249, 255);
+            }
+            .starter-template {
+                padding: 40px 15px;
+                text-align: center;
+            }
+            .navbar .nav > li > a {
+                float: none;
+                line-height: 19px;
+                padding: 9px 10px 11px;
+                text-decoration: none;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+                color: #ffffff;
+            }
+        </style>
+		{% block head %}{% endblock %}
+</head>
+<body>
+	{% block navigator %}{% endblock %}
+  {% block navigator_v %}{% endblock %}
+
+    <!--{% block footer %}{% endblock %} -->
+</body>
+</html>
+{% endtimezone %}

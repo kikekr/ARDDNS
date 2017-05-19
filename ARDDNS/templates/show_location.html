@@ -1,0 +1,67 @@
+{% extends "navbar/navigator_devices.html"%}
+{% load staticfiles %}
+{% block content %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item active">Devices</li>
+</ol>
+
+{% include 'pagination.html' %}
+
+<div class="row">
+
+    <div class="col-md-6">
+      <span class="pull-left">
+      <h2> Location details </h2>
+      <span>
+    </div>
+    <div class="col-md-6">
+      <span class="pull-right">
+        <a href="{% url 'create-device' %}" class="btn btn-default glyphicon glyphicon-plus" role="button">
+        </a>
+      </span>
+      <span class="pull-right">
+        <button class="btn btn-success" data-check-task-url="{% url 'check-all-devices' %}">Check all</button>
+        </a>
+      </span>
+    </div>
+  </div>
+
+
+<div><img class="hide" width="20" height="20" src="{% static 'images/ajax-loader.gif' %}" alt="loading-logo" data-ajax-loader></div>
+
+<table class="table table-striped">
+<thead>
+
+<th>Country code</th>
+<th>Country name</th>
+<th>Region code</th>
+<th>Region name</th>
+<th>City</th>
+<th>Zip code</th>
+<th>Time zone</th>
+<th>Latitude</th>
+<th>Longitude</th>
+
+</thead>
+<tbody>
+
+<th>{{ location.country_code }}</th>
+<th>{{ location.country_name }}</th>
+<th>{{ location.region_code }}</th>
+<th>{{ location.region_name }}</th>
+<th>{{ location.city }}</th>
+<th>{{ location.zip_code }}</th>
+<th>{{ location.time_zone }}</th>
+<th>{{ location.latitude }}</th>
+<th>{{ location.longitude }}</th>
+
+</tbody>
+</table>
+<div class="row">
+<div class="col-xs-5"></div>
+<div class="col-xs-4">
+{% include 'pagination.html' %}
+</div>
+<div class="col-xs-3"></div>
+</div>
+{% endblock %}

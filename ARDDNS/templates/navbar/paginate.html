@@ -1,0 +1,29 @@
+
+{% if model.has_other_pages %}
+<div class="pagination">
+    <span class="page-links">
+        {% if model.has_previous %}
+            <a href="?page={{ model.previous_page_number }}" class="btn btn-default" role="button">&laquo;</a>
+        {% endif %}
+        <span class="page-current">
+          <input id="page_form" type="text" name="" size="1" value="{{model.number}}">
+          de {{ model.paginator.num_pages }}
+        </span>
+        {% if model.has_next %}
+            <a href="?page={{ model.next_page_number }}" class="btn btn-default" role="button">&raquo;</a>
+
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+<script type="text/javascript">
+document.getElementById("page_form").onkeypress = function(e){
+  if (!e) e = window.event;
+  var keyCode = e.keyCode || e.which;
+  if (keyCode == '13'){
+    value = document.getElementById("page_form").value;
+    location.href = "?page="+value;
+    return false;
+  }
+}
+</script>
